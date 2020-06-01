@@ -11,7 +11,6 @@ const async = require('async');
 const cloud = require('./cloud');
 const database = require('./database');
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -21,7 +20,6 @@ let client = new WebTorrent();
 // Torrent-stream clients
 let streamClients = [];
 let blacklist = getBlacklist(); // TODO Rewrite
-let JWTKEY = process.env.JWTSECRET;
 
 cloud.init();
 
@@ -41,19 +39,7 @@ function verifyToken(req, res, next) {
   // skip if the request is from localhost or access token is valid
   if (req.headers.host.substring(0, 9) === '127.0.0.1' ||
       req.body.access_token === process.env.API_ACCESS_TOKEN) next();
-  else {
-    const { token } = req.cookies;
-    if (token) {
-      jwt.verify(token, JWTKEY, (err, authData) => {
-        if (err) res.sendStatus(403);
-        else {
-          next();
-        }
-      });
-    } else {
-      res.send('ダメダメ');
-    }
-  }
+  else res.send('ダメダメ');
 }
 
 app.get('/api/status', verifyToken, function (req, res) {
