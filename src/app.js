@@ -28,7 +28,7 @@ app.use(require('body-parser').urlencoded({
   extended: true
 }));
 app.set('view engine', 'ejs');
-// app.set('views', [path.join(__dirname, '/public'), path.join(__dirname, '../album/public')]);
+app.set('views', [path.join(__dirname, '../public')]);
 app.use(express.static(path.join(__dirname, '../public')));
 
 client.on('error', function (err) {
