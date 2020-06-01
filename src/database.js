@@ -39,7 +39,7 @@ exports.find = (target, callback) => {
 }
 
 exports.getDownloading = (callback) => {
-  connect("download", (client, collection) => {
+  connect(process.env.WORKER_ID, (client, collection) => {
     collection.find({
       finished: false
     }).toArray(function (err, docs) {
@@ -50,7 +50,7 @@ exports.getDownloading = (callback) => {
 }
 
 exports.getRetriedDownloading = (link, callback) => {
-  connect("download", (client, collection) => {
+  connect(process.env.WORKER_ID, (client, collection) => {
     collection.find({
       link: link,
       finished: false,
@@ -73,7 +73,7 @@ exports.getRetriedDownloading = (link, callback) => {
  * @param {Boolean} is_stream If this is a download using torrent-stream package
  */
 exports.newDownload = (link, type, folder, trackProgress = false, is_retry = false, is_stream = false) => {
-  connect("download", (client, collection) => {
+  connect(process.env.WORKER_ID, (client, collection) => {
     collection.insertOne({
       link: link, // magnet or url of the video
       progress: 0,
@@ -93,7 +93,7 @@ exports.newDownload = (link, type, folder, trackProgress = false, is_retry = fal
 }
 
 exports.finishDownload = (link, success = true, callback) => {
-  connect("download", (client, collection) => {
+  connect(process.env.WORKER_ID, (client, collection) => {
     collection.updateOne({
       link: link,
       finished: false,
