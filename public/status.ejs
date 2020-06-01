@@ -1,0 +1,95 @@
+<%- include('header'); -%>
+
+<h5 class="my-3">Current downloading: <%= data.webtorrent.length %> torrent.</h5>
+<table class="table table-bordered table-hover my-3 text-center">
+    <thead>
+        <tr>
+            <th>Torrent Hash</th>
+            <th>Downloaded</th>
+            <th>Uploaded</th>
+            <th>Peers</th>
+            <th>Download Speed</th>
+            <th>Upload Speed</th>
+            <th>Progress</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if(data.webtorrent.length == 0) { %>
+        <tr class="text-center">
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+        </tr>
+        <% } %>
+        <% for (let i = 0; i < data.webtorrent.length; i++) { %>
+        <tr>
+            <td><%= data.webtorrent.infohash[i] %></td>
+            <td><%= data.webtorrent.downloaded[i] %></td>
+            <td><%= data.webtorrent.uploaded[i] %></td>
+            <td><%= data.webtorrent.peers[i] %></td>
+            <% if(data.webtorrent.downSpeed[i].includes("MB")) { %>
+            <td class="text-success"><%= data.webtorrent.downSpeed[i] %></td>
+            <% } else { %>
+            <td><%= data.webtorrent.downSpeed[i] %></td>
+            <% } %>
+            <td><%= data.webtorrent.upSpeed[i] %></td>
+            <td><%= data.webtorrent.progress[i] %>%</td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+<h5 class="my-3">Current streaming: <%= data.streams.length %> torrent.</h5>
+<table class="table table-bordered table-hover my-3 text-center">
+    <thead>
+        <tr>
+            <th>Torrent Hash</th>
+            <th>Size</th>
+            <th>Downloaded</th>
+            <th>Uploaded</th>
+            <th>Peers</th>
+            <th>Download Speed</th>
+            <th>Upload Speed</th>
+            <th>Start Time</th>
+            <th>Progress</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if(data.streams.length == 0) { %>
+        <tr class="text-center">
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+            <td>--</td>
+        </tr>
+        <% } %>
+        <% for (let i = 0; i < data.streams.length; i++) { %>
+        <tr>
+            <td><%= data.streams.infohash[i] %></td>
+            <td><%= data.streams.size[i] %></td>
+            <td><%= data.streams.downloaded[i] %></td>
+            <td><%= data.streams.uploaded[i] %></td>
+            <td><%= data.streams.peers[i] %></td>
+            <% if(data.streams.downSpeed[i].includes("MB")) { %>
+            <td class="text-success"><%= data.streams.downSpeed[i] %></td>
+            <% } else { %>
+            <td><%= data.streams.downSpeed[i] %></td>
+            <% } %>
+            <td><%= data.streams.upSpeed[i] %></td>
+            <td><%= data.streams.startTime[i] %></td>
+            <td><%= data.streams.progress[i] %>%</td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+<p class="float-right">Cycle Time: <%= data.cycleTime %></p>
+
+<%- include('footer'); -%>
