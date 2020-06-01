@@ -1,1 +1,1 @@
-node --max-old-space-size=8192 $HOME/src/app.js
+web: node --max-old-space-size=8192 $HOME/src/app.js 
