@@ -70,25 +70,23 @@ app.get('/blacklist', verifyToken, function (req, res) {
 });
 
 app.post('/addTorrentStream', verifyToken, function (req, res) {
-  if (req.body.folder === 'dmhy') addTorrentStream(req.body.link, 'dmhy');
-  else addTorrentStream(req.body.link, req.body.directory);
-  res.redirect('/ff');
+  addTorrentStream(req.body.link, req.body.directory);
+  res.send('はい');
 });
 
 app.post('/addTorrent', verifyToken, function (req, res) {
-  if (req.body.folder === 'dmhy') addTorrent(req.body.link, 'dmhy');
-  else addTorrent(req.body.link, req.body.directory);
-  res.redirect('/f');
+  addTorrent(req.body.link, req.body.directory);
+  res.send('はい');
 });
 
 app.post('/addYoutube', verifyToken, function (req, res) {
   addVideo(req.body.link, req.body.directory);
-  res.redirect('/y');
+  res.send('はい');
 });
 
 app.post('/addBilibili', verifyToken, function (req, res) {
   addVideo(req.body.link, req.body.directory);
-  res.redirect('/b');
+  res.send('はい');
 });
 
 app.post('/addDmg', verifyToken, function (req, res) {
@@ -206,7 +204,7 @@ app.listen(port, () => {
 /**
  * New download method: Stream torrent to google drive using torrent-stream package
  */
-function addTorrentStream(magnet, directory_id = 'bt', is_retry = false) {
+function addTorrentStream(magnet, directory_id, is_retry = false) {
   /**
    * TODO Verify magnet link from requrest
    * Only magnet link is allowed, no torrent file or link.
@@ -256,7 +254,7 @@ function addTorrentStream(magnet, directory_id = 'bt', is_retry = false) {
   });
 }
 
-function addTorrent(magnet, directory_id = 'bt', is_retry = false) {
+function addTorrent(magnet, directory_id, is_retry = false) {
   let folder = magnet.replace(/\//g, '');
   database.newDownload(magnet, 1, directory_id, false, is_retry);
 
@@ -340,7 +338,7 @@ function addVideo(url, directory_id, is_retry) {
           path = process.env.HOME + '/' + fileName;
         }
 
-        cloud.upload(path, fileName, directory_id || 'bt', (e) => {
+        cloud.upload(path, fileName, directory_id, (e) => {
           if (e) {
             database.finishDownload(url, false);
             log(e);
