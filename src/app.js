@@ -172,34 +172,34 @@ app.get('*', function (req, res) {
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   log(`Listening on ${port}`, false);
-  // retryDownloads();
+  retryDownloads();
 });
 
 /**
  * Retry failed or unfinished downloads in the previos dyno cycle
  */
-// function retryDownloads() {
-//   database.getDownloading((data) => {
-//     for (let d of data) {
-//       // Retry only once
-//       database.getRetriedDownloading(d.link, (r) => {
-//         // Set previous download to failed
-//         database.finishDownload(d.link, false, () => {
-//           if (r.length == 0) {
-//             if (d.type == 1) {
-//               if (d.stream) addTorrentStream(d.link, d.folder, true);
-//               else addTorrent(d.link, d.folder, true);
-//             } else {
-//               addVideo(d.link, d.folder, true);
-//             }
-//           } else {
-//             log('Failed to download: ' + d.link);
-//           }
-//         });
-//       });
-//     }
-//   });
-// }
+function retryDownloads() {
+  database.getDownloading((data) => {
+    for (let d of data) {
+      // Retry only once
+      database.getRetriedDownloading(d.link, (r) => {
+        // Set previous download to failed
+        database.finishDownload(d.link, false, () => {
+          if (r.length == 0) {
+            if (d.type == 1) {
+              if (d.stream) addTorrentStream(d.link, d.folder, true);
+              else addTorrent(d.link, d.folder, true);
+            } else {
+              addVideo(d.link, d.folder, true);
+            }
+          } else {
+            log('Failed to download: ' + d.link);
+          }
+        });
+      });
+    }
+  });
+}
 
 /**
  * New download method: Stream torrent to google drive using torrent-stream package
