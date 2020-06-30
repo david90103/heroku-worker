@@ -153,7 +153,7 @@ app.get('/', function (req, res) {
     data.streams.upSpeed.push(prettyBytes(t.swarm.uploadSpeed()));
     data.streams.downloaded.push(prettyBytes(t.swarm.downloaded));
     data.streams.uploaded.push(prettyBytes(t.swarm.uploaded));
-    data.streams.progress.push(Number.parseFloat((t.swarm.downloaded / t.torrent.length) * 100).toFixed(1));
+    data.streams.progress.push((t.torrent) ? Number.parseFloat((t.swarm.downloaded / t.torrent.length) * 100).toFixed(1) : 0);
     data.streams.startTime.push(t.startTime);
     data.streams.files.push([t.files.map(v => {
       return v.name + ' (' + prettyBytes(v.length).toString() + ')';

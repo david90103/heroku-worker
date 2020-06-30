@@ -40,11 +40,12 @@ exports.upload = function (path, name, folder, callback) {
   }, function (err, file) {
     if (err) {
       console.log('[x] Upload error at: file=%s, name=%s\n', path, name);
-      console.error(err);
+      if (err.response) {
+        console.log(err.response.data);
+      } else {
+        console.log(err.message);
+      }
       fs.appendFile('error.txt', '[x] Upload error at: file=' + path + ', name=' + name + '\n', (e) => {
-        if (e) console.log(e);
-      });
-      fs.appendFile('error.txt', err, (e) => {
         if (e) console.log(e);
       });
     } else {
@@ -73,11 +74,12 @@ exports.uploadStream = function (stream, name, folder, callback) {
   }, function (err, file) {
     if (err) {
       console.log('[x] Upload error at: name=%s\n', name);
-      console.error(err);
+      if (err.response) {
+        console.log(err.response.data);
+      } else {
+        console.log(err.message);
+      }
       fs.appendFile('error.txt', '[x] Upload error at: name=' + name + '\n', (e) => {
-        if (e) console.log(e);
-      });
-      fs.appendFile('error.txt', err, (e) => {
         if (e) console.log(e);
       });
       callback(err);
